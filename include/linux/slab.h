@@ -178,6 +178,9 @@
 
 #include <linux/kasan.h>
 
+void verify_my_address_plus(struct kmem_cache *s, void *object);
+
+
 struct list_lru;
 struct mem_cgroup;
 /*

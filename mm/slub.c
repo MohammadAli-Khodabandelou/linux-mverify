@@ -3495,6 +3495,29 @@ void *kmem_cache_alloc(struct kmem_cache *s, gfp_t gfpflags)
 }
 EXPORT_SYMBOL(kmem_cache_alloc);
 
+//added by mali
+void validate_fast_freelist(struct kmem_cache *s, void *object_to_verify)
+{
+	struct kmem_cache_cpu *c;
+	void *object;
+	void *next_object;
+
+	c = raw_cpu_ptr(s->cpu_slab);
+
+	object = c->freelist;
+
+	printk("object to verify address: %p\n", object_to_verify);
+	while(object) {
+		//print address of the object
+		printk("object address: %p\n", object);
+		//get next object
+		next_object = get_freepointer_safe(s, object);
+		prefetch_freepointer(s, next_object);
+		object = next_object;
+	}
+}
+EXPORT_SYMBOL(validate_fast_freelist);
+
 void *kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
 			   gfp_t gfpflags)
 {

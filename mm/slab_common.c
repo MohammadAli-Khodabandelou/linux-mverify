@@ -30,6 +30,8 @@
 
 #include "internal.h"
 #include "slab.h"
+#include "slub.h"
+
 
 #define CREATE_TRACE_POINTS
 #include <trace/events/kmem.h>
@@ -1473,3 +1475,9 @@ int should_failslab(struct kmem_cache *s, gfp_t gfpflags)
 	return 0;
 }
 ALLOW_ERROR_INJECTION(should_failslab, ERRNO);
+
+
+void verify_my_address_plus(struct kmem_cache *s, void *object) {
+	validate_fast_freelist(s, object);
+}
+EXPORT_SYMBOL(verify_my_address_plus);
